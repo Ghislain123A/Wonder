@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - WONDER ELECTRONICS</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Admin Navigation -->
+    <nav class="navbar admin-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>WONDER ELECTRONICS - Admin</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Back to Store</a></li>
+                <li><a href="#products" class="nav-link">Manage Products</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Admin Content -->
+    <div class="admin-container">
+        <div class="admin-sidebar">
+            <h3>Admin Panel</h3>
+            <ul class="admin-menu">
+                <li><a href="#add-product" class="admin-link active">Add Product</a></li>
+                <li><a href="#manage-products" class="admin-link">Manage Products</a></li>
+                <li><a href="#manage-categories" class="admin-link">Manage Categories</a></li>
+                <li><a href="#trending-slideshow" class="admin-link">Trending Slideshow</a></li>
+                <li><a href="#manage-users" class="admin-link">Manage Users</a></li>
+                <li><a href="#manage-supporters" class="admin-link">Admin Supporters</a></li>
+                <li><a href="#view-orders" class="admin-link">View Orders</a></li>
+                <li><a href="#profit-analytics" class="admin-link">Profit Analytics</a></li>
+                <li><a href="#password-resets" class="admin-link">Password Resets</a></li>
+                <li><a href="#chat-support" class="admin-link">Chat Support</a></li>
+                <li><a href="#website-settings" class="admin-link">Website Settings</a></li>
+            </ul>
+        </div>
+
+        <div class="admin-content">
+            <!-- Add Product Section -->
+            <section id="add-product" class="admin-section active">
+                <h2>Add New Product</h2>
+                <form id="productForm" class="product-form">
+                    <div class="form-group">
+                        <label for="productName">Product Name</label>
+                        <input type="text" id="productName" name="productName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productPrice">Price ($)</label>
+                        <input type="number" id="productPrice" name="productPrice" step="0.01" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productCategory">Category</label>
+                        <select id="productCategory" name="productCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="smartphones">Smartphones</option>
+                            <option value="laptops">Laptops</option>
+                            <option value="audio">Audio</option>
+                            <option value="gaming">Gaming</option>
+                            <option value="accessories">Accessories</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productDescription">Description</label>
+                        <textarea id="productDescription" name="productDescription" rows="4" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productImage">Main Image URL</label>
+                        <input type="url" id="productImage" name="productImage"
+                            placeholder="https://example.com/image.jpg">
+                        <small>Or upload from computer:</small>
+                        <input type="file" id="productImageFile" accept="image/*"
+                            onchange="handleImageUpload(this, 'productImage')">
+                    </div>
+                    <div class="form-group">
+                        <label for="productImages">Additional Images (Multiple URLs, one per line)</label>
+                        <textarea id="productImages" name="productImages" rows="3"
+                            placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg&#10;https://example.com/image3.jpg"></textarea>
+                        <small>Or upload multiple images from computer:</small>
+                        <input type="file" id="productImagesFiles" accept="image/*" multiple
+                            onchange="handleMultipleImageUpload(this, 'productImages')">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productStock">Stock Quantity</label>
+                        <input type="number" id="productStock" name="productStock" min="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productBrand">Brand</label>
+                        <input type="text" id="productBrand" name="productBrand" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productDiscount">Discount (%)</label>
+                        <input type="number" id="productDiscount" name="productDiscount" min="0" max="100" step="1"
+                            value="0">
+                        <small>Enter 0 for no discount. Example: 20 for 20% off</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productCondition">Product Condition</label>
+                        <select id="productCondition" name="productCondition" required>
+                            <option value="N">N - Brand New</option>
+                            <option value="S">S - Second-hand</option>
+                        </select>
+                        <small>Select N for new products, S for second-hand/used items</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productColors">Available Colors (comma-separated)</label>
+                        <input type="text" id="productColors" name="productColors"
+                            placeholder="Black, White, Blue, Red">
+                        <small>Enter available colors separated by commas. Example: Black, White, Silver</small>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Add Product</button>
+                </form>
+            </section>
+
+            <!-- Manage Products Section -->
+            <section id="manage-products" class="admin-section">
+                <h2>Manage Products</h2>
+                <div class="products-table-container">
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Condition</th>
+                                <th>Discount</th>
+                                <th>Colors</th>
+                                <th>Stock</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTableBody">
+                            <!-- Products will be loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Manage Categories Section -->
+            <section id="manage-categories" class="admin-section">
+                <h2>Manage Product Categories</h2>
+                <div class="categories-container">
+                    <div class="add-category-section">
+                        <h3>Add New Category</h3>
+                        <form id="categoryForm" class="category-form">
+                            <div class="form-group">
+                                <label for="categoryName">Category Name</label>
+                                <input type="text" id="categoryName" name="categoryName" required
+                                    placeholder="e.g., Gaming, Audio, Smartphones">
+                            </div>
+                            <div class="form-group">
+                                <label for="categoryIcon">Category Icon (FontAwesome class)</label>
+                                <input type="text" id="categoryIcon" name="categoryIcon"
+                                    placeholder="e.g., fas fa-gamepad" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="categoryDescription">Description</label>
+                                <textarea id="categoryDescription" name="categoryDescription" rows="3"
+                                    placeholder="Brief description of this category"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Add Category
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="categories-list">
+                        <h3>Existing Categories</h3>
+                        <div class="categories-grid" id="categoriesGrid">
+                            <!-- Categories will be loaded dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Trending Slideshow Section -->
+            <section id="trending-slideshow" class="admin-section">
+                <h2>Manage Trending Slideshow</h2>
+                <div class="slideshow-management">
+                    <div class="add-slide-section">
+                        <h3>Add New Slide</h3>
+                        <form id="addSlideForm">
+                            <div class="form-group">
+                                <label for="slideImage">Slide Image URL</label>
+                                <input type="url" id="slideImage" name="slideImage"
+                                    placeholder="https://example.com/image.jpg">
+                                <small>Or upload from computer:</small>
+                                <input type="file" id="slideImageFile" accept="image/*"
+                                    onchange="handleImageUpload(this, 'slideImage')">
+                            </div>
+                            <div class="form-group">
+                                <label for="slideTitle">Slide Title (Optional)</label>
+                                <input type="text" id="slideTitle" name="slideTitle" placeholder="Promotional Message">
+                            </div>
+                            <div class="form-group">
+                                <label for="slideDescription">Slide Description (Optional)</label>
+                                <textarea id="slideDescription" name="slideDescription" rows="2"
+                                    placeholder="Brief description"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-plus"></i> Add Slide
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="slides-list">
+                        <h3>Current Slides</h3>
+                        <div class="slides-grid" id="slidesGrid">
+                            <!-- Slides will be loaded dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Manage Users Section -->
+            <section id="manage-users" class="admin-section">
+                <h2>Manage Users</h2>
+                <div class="users-stats">
+                    <div class="stat-card">
+                        <h3 id="totalUsers">0</h3>
+                        <p>Total Users</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="activeUsers">0</h3>
+                        <p>Active Users</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="newUsersToday">0</h3>
+                        <p>New Today</p>
+                    </div>
+                </div>
+                <div class="users-table-container">
+                    <table class="users-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Join Date</th>
+                                <th>Status</th>
+                                <th>Payment</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <!-- Users will be loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- View Orders Section -->
+            <section id="view-orders" class="admin-section">
+                <h2>Orders</h2>
+                <div class="orders-table-container">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Payment</th>
+                                <th>Delivery Period</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <!-- Orders will be loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Admin Supporters Section -->
+            <section id="manage-supporters" class="admin-section">
+                <h2>Manage Admin Supporters</h2>
+                <div class="supporters-container">
+                    <div class="add-supporter-section">
+                        <h3>Add New Supporter</h3>
+                        <form id="supporterForm" class="supporter-form">
+                            <div class="form-group">
+                                <label for="supporterName">Full Name</label>
+                                <input type="text" id="supporterName" name="supporterName" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="supporterEmail">Email</label>
+                                <input type="email" id="supporterEmail" name="supporterEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="supporterPhone">Phone Number</label>
+                                <input type="tel" id="supporterPhone" name="supporterPhone" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="supporterRole">Role</label>
+                                <select id="supporterRole" name="supporterRole" required>
+                                    <option value="support">Customer Support</option>
+                                    <option value="sales">Sales Representative</option>
+                                    <option value="manager">Manager</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="supporterPermissions">Permissions</label>
+                                <div class="permissions-grid">
+                                    <label><input type="checkbox" name="permissions" value="upload_products"> Upload
+                                        Products</label>
+                                    <label><input type="checkbox" name="permissions" value="edit_products"> Edit
+                                        Products</label>
+                                    <label><input type="checkbox" name="permissions" value="view_orders"> View
+                                        Orders</label>
+                                    <label><input type="checkbox" name="permissions" value="chat_support"> Chat
+                                        Support</label>
+                                    <label><input type="checkbox" name="permissions" value="send_delivery_notes"> Send
+                                        Delivery Notes</label>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-user-plus"></i> Add Supporter
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="supporters-list">
+                        <h3>Current Supporters</h3>
+                        <div class="supporters-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="supportersTableBody">
+                                    <!-- Supporters will be loaded dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Profit Analytics Section -->
+            <section id="profit-analytics" class="admin-section">
+                <h2>Profit Analytics</h2>
+                <div class="analytics-container">
+                    <div class="analytics-filters">
+                        <select id="analyticsPeriod">
+                            <option value="daily">Daily</option>
+                            <option value="weekly">Weekly</option>
+                            <option value="monthly">Monthly</option>
+                            <option value="yearly">Yearly</option>
+                        </select>
+                    </div>
+
+                    <div class="analytics-stats">
+                        <div class="stat-card">
+                            <h3>Total Profit</h3>
+                            <span id="totalProfit">$0.00</span>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Total Revenue</h3>
+                            <span id="totalRevenue">$0.00</span>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Total Costs</h3>
+                            <span id="totalCosts">$0.00</span>
+                        </div>
+                        <div class="stat-card">
+                            <h3>Profit Margin</h3>
+                            <span id="profitMargin">0%</span>
+                        </div>
+                    </div>
+
+                    <div class="product-profit-table">
+                        <h3>Product Profit Analysis</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Purchase Price</th>
+                                    <th>Selling Price</th>
+                                    <th>Profit per Unit</th>
+                                    <th>Units Sold</th>
+                                    <th>Total Profit</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productProfitTableBody">
+                                <!-- Product profit data will be loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Delivery Management Section -->
+            <section id="delivery-management" class="admin-section">
+                <h2>Delivery Management</h2>
+                <div class="delivery-container">
+                    <div class="delivery-settings">
+                        <h3>Delivery Settings</h3>
+                        <form id="deliverySettingsForm">
+                            <div class="form-group">
+                                <label for="defaultDeliveryDays">Default Delivery Period (Days)</label>
+                                <input type="number" id="defaultDeliveryDays" name="defaultDeliveryDays" value="3"
+                                    min="1" max="30" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="expressDeliveryDays">Express Delivery Period (Days)</label>
+                                <input type="number" id="expressDeliveryDays" name="expressDeliveryDays" value="1"
+                                    min="1" max="7" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="standardDeliveryDays">Standard Delivery Period (Days)</label>
+                                <input type="number" id="standardDeliveryDays" name="standardDeliveryDays" value="5"
+                                    min="1" max="30" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="deliveryFee">Delivery Fee</label>
+                                <input type="number" id="deliveryFee" name="deliveryFee" value="0" step="0.01" min="0"
+                                    required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Delivery Settings</button>
+                        </form>
+                    </div>
+
+                    <div class="delivery-orders">
+                        <h3>Orders Pending Delivery</h3>
+                        <div class="delivery-orders-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Delivery Period</th>
+                                        <th>Expected Delivery</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="deliveryOrdersTableBody">
+                                    <!-- Delivery orders will be loaded dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Password Resets Section -->
+            <section id="password-resets" class="admin-section">
+                <h2>Password Reset Requests</h2>
+                <div class="password-resets-container">
+                    <div class="reset-stats">
+                        <div class="stat-card">
+                            <h3 id="pendingResets">0</h3>
+                            <p>Pending Requests</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="completedResets">0</h3>
+                            <p>Completed</p>
+                        </div>
+                    </div>
+
+                    <div class="reset-requests-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Email</th>
+                                    <th>Request Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resetRequestsTableBody">
+                                <!-- Reset requests will be loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chat Support Section -->
+            <section id="chat-support" class="admin-section">
+                <h2>Customer Support Chat</h2>
+                <div class="admin-chat-container">
+                    <div class="chat-sessions">
+                        <h3>Active Chats</h3>
+                        <div class="sessions-list" id="chatSessionsList">
+                            <!-- Chat sessions will be loaded dynamically -->
+                        </div>
+                    </div>
+
+                    <div class="chat-window">
+                        <div class="chat-window-header">
+                            <h3 id="currentChatUser">Select a chat to begin</h3>
+                        </div>
+                        <div class="admin-chat-messages" id="adminChatMessages">
+                            <!-- Messages will be displayed here -->
+                        </div>
+                        <div class="admin-chat-input">
+                            <input type="text" id="adminChatInput" placeholder="Type your message..."
+                                onkeypress="handleAdminChatKeyPress(event)">
+                            <button onclick="sendAdminMessage()" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i> Send
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Website Settings Section -->
+            <section id="website-settings" class="admin-section">
+                <h2>Website Settings</h2>
+                <div class="settings-container">
+                    <div class="settings-tabs">
+                        <button class="settings-tab-btn active" onclick="switchSettingsTab('general')">General</button>
+                        <button class="settings-tab-btn" onclick="switchSettingsTab('hero')">Hero Section</button>
+                        <button class="settings-tab-btn" onclick="switchSettingsTab('about')">About Section</button>
+                        <button class="settings-tab-btn" onclick="switchSettingsTab('contact')">Contact Info</button>
+                        <button class="settings-tab-btn" onclick="switchSettingsTab('payment')">Payment
+                            Settings</button>
+                        <button class="settings-tab-btn" onclick="switchSettingsTab('social')">Social Media</button>
+                    </div>
+
+                    <!-- General Settings -->
+                    <div id="general-settings" class="settings-content active">
+                        <h3>General Website Settings</h3>
+                        <form id="generalSettingsForm">
+                            <div class="form-group">
+                                <label for="siteTitle">Site Title</label>
+                                <input type="text" id="siteTitle" name="siteTitle" value="WONDER ELECTRONICS">
+                            </div>
+                            <div class="form-group">
+                                <label for="siteDescription">Site Description</label>
+                                <textarea id="siteDescription" name="siteDescription"
+                                    rows="3">Discover the latest in consumer electronics with unbeatable prices and quality</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="currency">Default Currency</label>
+                                <select id="currency" name="currency">
+                                    <option value="USD">USD ($)</option>
+                                    <option value="EUR">EUR (€)</option>
+                                    <option value="GBP">GBP (£)</option>
+                                    <option value="RWF">RWF</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="usdToRwf">USD to RWF Rate</label>
+                                <input type="number" id="usdToRwf" name="usdToRwf" value="1300" step="0.01" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="usdToEur">USD to EUR Rate</label>
+                                <input type="number" id="usdToEur" name="usdToEur" value="0.85" step="0.01" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="usdToGbp">USD to GBP Rate</label>
+                                <input type="number" id="usdToGbp" name="usdToGbp" value="0.73" step="0.01" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label for="taxRate">Tax Rate (%)</label>
+                                <input type="number" id="taxRate" name="taxRate" value="5" step="0.1" min="0" max="100">
+                            </div>
+                            <div class="form-group">
+                                <label for="showStockQuantity">Display Stock Quantity to Customers</label>
+                                <select id="showStockQuantity" name="showStockQuantity">
+                                    <option value="true">Yes - Show stock quantity</option>
+                                    <option value="false">No - Hide stock quantity</option>
+                                </select>
+                                <small>Choose whether customers can see available stock quantities</small>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save General Settings</button>
+                        </form>
+                    </div>
+
+                    <!-- Hero Section Settings -->
+                    <div id="hero-settings" class="settings-content">
+                        <h3>Hero Section Settings</h3>
+                        <form id="heroSettingsForm">
+                            <div class="form-group">
+                                <label for="heroTitle">Hero Title</label>
+                                <input type="text" id="heroTitle" name="heroTitle"
+                                    value="Welcome to WONDER ELECTRONICS">
+                            </div>
+                            <div class="form-group">
+                                <label for="heroSubtitle">Hero Subtitle</label>
+                                <textarea id="heroSubtitle" name="heroSubtitle"
+                                    rows="2">Discover the latest in consumer electronics with unbeatable prices and quality</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="heroButtonText">Button Text</label>
+                                <input type="text" id="heroButtonText" name="heroButtonText" value="Shop Now">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Hero Settings</button>
+                        </form>
+                    </div>
+
+                    <!-- About Section Settings -->
+                    <div id="about-settings" class="settings-content">
+                        <h3>About Section Settings</h3>
+                        <form id="aboutSettingsForm">
+                            <div class="form-group">
+                                <label for="aboutTitle">About Title</label>
+                                <input type="text" id="aboutTitle" name="aboutTitle" value="About WONDER ELECTRONICS">
+                            </div>
+                            <div class="form-group">
+                                <label for="aboutContent">About Content</label>
+                                <textarea id="aboutContent" name="aboutContent"
+                                    rows="5">We are your trusted partner for premium consumer electronics. With years of experience in the industry, we bring you the latest technology at competitive prices. Our commitment to quality and customer satisfaction makes us the preferred choice for electronics enthusiasts.</textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save About Settings</button>
+                        </form>
+                    </div>
+
+                    <!-- Contact Settings -->
+                    <div id="contact-settings" class="settings-content">
+                        <h3>Contact Information</h3>
+                        <form id="contactSettingsForm">
+                            <div class="form-group">
+                                <label for="contactPhone">Phone Number</label>
+                                <input type="tel" id="contactPhone" name="contactPhone" value="+1 (555) 123-4567">
+                            </div>
+                            <div class="form-group">
+                                <label for="contactEmail">Email Address</label>
+                                <input type="email" id="contactEmail" name="contactEmail"
+                                    value="info@wonderelectronics.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="contactAddress">Physical Address</label>
+                                <textarea id="contactAddress" name="contactAddress"
+                                    rows="3">123 Electronics Street, Tech City, TC 12345</textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Contact Settings</button>
+                        </form>
+                    </div>
+
+                    <!-- Payment Settings -->
+                    <div id="payment-settings" class="settings-content">
+                        <h3>Payment Settings</h3>
+                        <form id="paymentSettingsForm">
+                            <div class="form-group">
+                                <label for="paymentPhone">Mobile Money Phone Number</label>
+                                <input type="tel" id="paymentPhone" name="paymentPhone" value="+250787070049">
+                            </div>
+                            <div class="form-group">
+                                <label for="paymentInstructions">Payment Instructions</label>
+                                <textarea id="paymentInstructions" name="paymentInstructions"
+                                    rows="3">Please include your order number in the payment reference when making payment via Mobile Money.</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="deliveryFee">Delivery Fee</label>
+                                <input type="number" id="deliveryFee" name="deliveryFee" value="0" step="0.01" min="0">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Payment Settings</button>
+                        </form>
+                    </div>
+
+                    <!-- Social Media Settings -->
+                    <div id="social-settings" class="settings-content">
+                        <h3>Social Media Settings</h3>
+                        <form id="socialSettingsForm">
+                            <div class="form-group">
+                                <label>WhatsApp Contact (Fixed)</label>
+                                <input type="text" value="+250787070049" disabled>
+                                <small>This number is fixed and cannot be changed</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="instagramName">Instagram Name</label>
+                                <input type="text" id="instagramName" name="instagramName" value="Wonder Electronics">
+                            </div>
+                            <div class="form-group">
+                                <label for="facebookName">Facebook Name</label>
+                                <input type="text" id="facebookName" name="facebookName" value="Wonder Electronics">
+                            </div>
+                            <div class="form-group">
+                                <label for="tiktokName">TikTok Name</label>
+                                <input type="text" id="tiktokName" name="tiktokName" value="Wonder Electronics">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save Social Media Settings</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Edit Product Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Product</h2>
+            <form id="editProductForm" class="product-form">
+                <input type="hidden" id="editProductId">
+
+                <div class="form-group">
+                    <label for="editProductName">Product Name</label>
+                    <input type="text" id="editProductName" name="productName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editProductPrice">Price ($)</label>
+                    <input type="number" id="editProductPrice" name="productPrice" step="0.01" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editProductCategory">Category</label>
+                    <select id="editProductCategory" name="productCategory" required>
+                        <option value="smartphones">Smartphones</option>
+                        <option value="laptops">Laptops</option>
+                        <option value="audio">Audio</option>
+                        <option value="gaming">Gaming</option>
+                        <option value="accessories">Accessories</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="editProductDescription">Description</label>
+                    <textarea id="editProductDescription" name="productDescription" rows="4" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="editProductImage">Image URL</label>
+                    <input type="url" id="editProductImage" name="productImage">
+                </div>
+
+                <div class="form-group">
+                    <label for="editProductStock">Stock Quantity</label>
+                    <input type="number" id="editProductStock" name="productStock" min="0" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editProductBrand">Brand</label>
+                    <input type="text" id="editProductBrand" name="productBrand" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Update Product</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+
+</html>
